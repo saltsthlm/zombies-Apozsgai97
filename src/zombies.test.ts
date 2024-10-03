@@ -1,23 +1,36 @@
 import { ok } from "node:assert/strict";
 import { test } from "node:test";
+import { strict as assert } from "node:assert/strict";
 
-const createRoom = (capacity: number) => {
+
+const createRoom = (capacity: number, zombies: number) => {
   const _capacity = capacity;
+  const _zombies = zombies
 
   return {
-    isFull: () => true,
+    isFull: () => {
+      if (_capacity === _zombies) return true;
+      if (_capacity === 0) return true;
+      return false;
+    },
   };
 };
 
 test("room is full", () => {
-  const room = createRoom(0);
+  const room = createRoom(0, 0);
 
   const isRoomFull = room.isFull();
 
   ok(isRoomFull);
 });
 
-test.skip("empty room that fits one zombie is not full", () => {});
+test("empty room that fits one zombie is not full", () => {
+  const room = createRoom(1, 0);
+
+  const isRoomFull = room.isFull();
+
+  ok(!isRoomFull);
+});
 
 test.skip("room with no capacity cannot fit any zombies", () => {});
 
