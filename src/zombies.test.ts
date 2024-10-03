@@ -10,8 +10,6 @@ const createRoom = (startCapacity: number, startZombies: number) => {
   zombies =+ startZombies
 };
 
-
-  
 const isFull = () => {
   if (capacity <= zombies) return true;
   if (capacity === 0) return true;
@@ -20,6 +18,10 @@ const isFull = () => {
 
 const addZombie = (extraZombies: number) => {
   zombies =+ extraZombies;
+}
+
+const zombieEatsZombie = () => {
+  zombies - 1;
 }
 
 
@@ -66,6 +68,14 @@ test("two-roomer is not full when a zombie is added", () => {
   ok(!isRoomFull);
 });
 
-test.skip("second zombie consumes first zombie when added to a one-roomer", () => {});
+test("second zombie consumes first zombie when added to a one-roomer", () => {
+  createRoom(1, 1);
+  addZombie(1);
+  zombieEatsZombie;
+
+  const isRoomFull = isFull();
+
+  ok(isRoomFull);
+});
 
 // You are free to add more tests that you think are relevant!
