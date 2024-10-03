@@ -1,30 +1,81 @@
 import { ok } from "node:assert/strict";
 import { test } from "node:test";
+import { strict as assert } from "node:assert/strict";
 
-const createRoom = (capacity: number) => {
-  const _capacity = capacity;
+let zombies = 0;
+let capacity = 0;
 
-  return {
-    isFull: () => true,
-  };
+const createRoom = (startCapacity: number, startZombies: number) => {
+  capacity =+ startCapacity;
+  zombies =+ startZombies
 };
 
-test("room is full", () => {
-  const room = createRoom(0);
+const isFull = () => {
+  if (capacity <= zombies) return true;
+  if (capacity === 0) return true;
+    return false;
+}
 
-  const isRoomFull = room.isFull();
+const addZombie = (extraZombies: number) => {
+  zombies =+ extraZombies;
+}
+
+const zombieEatsZombie = () => {
+  zombies - 1;
+}
+
+
+test("room is full", () => {
+  createRoom(0, 0);
+
+  const isRoomFull = isFull();
 
   ok(isRoomFull);
 });
 
-test.skip("empty room that fits one zombie is not full", () => {});
+test("empty room that fits one zombie is not full", () => {
+  createRoom(1, 0);
 
-test.skip("room with no capacity cannot fit any zombies", () => {});
+  const isRoomFull = isFull();
 
-test.skip("one-roomer becomes full when a zombie is added", () => {});
+  ok(!isRoomFull);
+});
 
-test.skip("two-roomer is not full when a zombie is added", () => {});
+test("room with no capacity cannot fit any zombies", () => {
+  const room = createRoom(0, 1);
 
-test.skip("second zombie consumes first zombie when added to a one-roomer", () => {});
+  const isRoomFull = isFull();
+
+  ok(isRoomFull);
+});
+
+test("one-roomer becomes full when a zombie is added", () => {
+  createRoom(1, 0);
+  addZombie(1);
+
+  const isRoomFull = isFull();
+
+  ok(isRoomFull);
+
+});
+
+test("two-roomer is not full when a zombie is added", () => {
+  createRoom(2, 0);
+  addZombie(1);
+
+  const isRoomFull = isFull();
+
+  ok(!isRoomFull);
+});
+
+test("second zombie consumes first zombie when added to a one-roomer", () => {
+  createRoom(1, 1);
+  addZombie(1);
+  zombieEatsZombie;
+
+  const isRoomFull = isFull();
+
+  ok(isRoomFull);
+});
 
 // You are free to add more tests that you think are relevant!
